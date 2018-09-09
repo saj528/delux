@@ -11,9 +11,16 @@ gameScene.preload = function() {
   this.load.image('background', 'assets/sky.png');
   this.load.image('sun', 'assets/sun.png');
   this.load.image('clouds', 'assets/clouds.png');
-  this.load.image('mountains', 'assets/mountains2.png');
+  this.load.image('mountains', 'assets/mountainspink.png');
+  this.load.image('plants', 'assets/plantlife.png');
+  this.load.image('plantsback', 'assets/plantlifeback.png');
   this.load.image('billboardmemories', 'assets/billboardmemories.png');
-  this.load.image('ground', 'assets/platform.png');
+  this.load.image('billboardcar', 'assets/billboardcar.png');
+  this.load.image('billboardmovies', 'assets/billboardmovies.png');
+  this.load.image('billboardrandom', 'assets/billboardrandom.png');
+  this.load.image('billboardvampire', 'assets/billboardvampire.png');
+  this.load.image('xterra', 'assets/xterra.png');
+  this.load.image('ground', 'assets/groundLong.png');
   this.load.spritesheet('enemies',
       'assets/enemies.png',
       { frameWidth: 50,
@@ -49,28 +56,51 @@ gameScene.create = function() {
   this.clouds.scrollFactorX = 0;
   this.mountains = this.add.tileSprite(400, 300, 800, 600, 'mountains');
   this.mountains.scrollFactorX = 0;
-
+  this.plantsBack = this.add.tileSprite(400, 279, 800, 600, 'plantsback');
+  this.plantsBack.scrollFactorX = 0;
   this.add
-  .sprite(900, 350, 'billboardmemories')
+  .sprite(1200, 350, 'billboardmemories')
   .setDisplaySize(960, 960)
   .setScale(.6)
   
+  this.add
+  .sprite(2350, 350, 'billboardcar')
+  .setDisplaySize(960, 960)
+  .setScale(.6)
+
+  this.add
+  .sprite(3350, 350, 'billboardmovies')
+  .setDisplaySize(960, 960)
+  .setScale(.6)
+
+  this.add
+  .sprite(4350, 350, 'billboardrandom')
+  .setDisplaySize(960, 960)
+  .setScale(.6)
+
+  this.add
+  .sprite(5350, 350, 'billboardvampire')
+  .setDisplaySize(960, 960)
+  .setScale(.6)
+
+  this.xterra = this.physics.add.sprite(-180, 519, 'xterra').setScale(.3);
+  this.xterra.body.allowGravity = false;
+  this.xterra.body.immovable = true;
+  
+
+  //this.plants = this.add.tileSprite(400, 279, 800, 600, 'plants');
+  //this.plants.scrollFactorX = 0;
+
   this.add.text(65, 100, "Memories: \n (based on a true story)", {
     font: "24px Arial",
     fill: "white",
     align: "center",
 }).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
-
-this.add.text(400, 500, "Go Right >>>", {
-  font: "18px Arial",
-  fill: "red",
-  align: "center",
-}).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5);
   
   //this.platforms = this.add.tileSprite(200, 570, 4000, 300, 'ground').setScale(.3);
   //this.platforms = this.physics.add.staticGroup();
   this.platforms = this.physics.add.staticGroup();
-  this.platforms.create(400, 600, 'ground').setScale(2).refreshBody();
+  this.platforms.create(9600, 590, 'ground').setScale(2).refreshBody();
 
   this.player = this.physics.add.sprite(150, 300, 'player', 2);
   this.player.canAttack = true;
@@ -103,7 +133,7 @@ this.add.text(400, 500, "Go Right >>>", {
     repeat: -1
   });
 
-  this.physics.add.collider(this.player, this.platforms);
+  this.physics.add.collider(this.player, [this.platforms,this.xterra]);
 
   this.keys = this.input.keyboard.addKeys({
     'attack': Phaser.Input.Keyboard.KeyCodes.SPACE,
@@ -121,6 +151,8 @@ gameScene.update = function() {
   this.clouds.tilePositionX = this.cameras.main.scrollX * 0.03;
   //this.sun.positionX = this.cameras.main.scrollX * 0.05;
   this.mountains.tilePositionX = this.cameras.main.scrollX * 0.6;
+  this.plantsBack.tilePositionX = this.cameras.main.scrollX * 0.7;
+  //this.plants.tilePositionX = this.cameras.main.scrollX * 1;
   this.cameras.main.scrollX = this.player.x - 400;
 
   if (this.keys.attack.isDown) {
