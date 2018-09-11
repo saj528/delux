@@ -219,13 +219,13 @@ gameScene.update = function() {
 
   if (this.cursors.left.isDown)
   {
-    this.player.setVelocityX(-1060);
+    this.player.setVelocityX(-560);
     this.player.flipX = true;
     this.player.anims.play('left', true);
   }
   else if (this.cursors.right.isDown)
   {
-    this.player.setVelocityX(1060);
+    this.player.setVelocityX(560);
     this.player.flipX = false;
     this.player.anims.play('right', true);
   }
