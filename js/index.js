@@ -19,16 +19,13 @@ gameScene.preload = function() {
   this.load.image('billboardmovies', 'assets/billboardmovies.png');
   this.load.image('billboardrandom', 'assets/billboardrandom.png');
   this.load.image('billboardvampire', 'assets/billboardvampire.png');
+  this.load.image('skeleton', 'assets/skeleton.png');
+  this.load.image('microtable', 'assets/microtable.png');
+  this.load.image('guy', 'assets/guy.png');
   this.load.image('xterra', 'assets/xterra.png');
+  this.load.image('bubble', 'assets/bubble.png');
+  this.load.image('button', 'assets/button.png');
   this.load.image('ground', 'assets/groundLong.png');
-  this.load.spritesheet('enemies',
-      'assets/enemies.png',
-      { frameWidth: 50,
-        frameHeight: 50,
-        margin: 0,
-        spacing: 0,
-      }
-  );
   this.load.spritesheet('player',
       'assets/playerlady.png',
       { frameWidth: 53,
@@ -38,13 +35,17 @@ gameScene.preload = function() {
       }
   );
   this.load.spritesheet('bird',
-  'assets/bird.png',
-  { frameWidth: 354,
-    frameHeight: 290,
-    margin: 3,
-    spacing: 40,
-  }
-);
+      'assets/birdfixed.png',
+      { frameWidth: 357,
+        frameHeight: 270,
+      }
+  );
+  this.load.spritesheet('dino',
+      'assets/dino.png',
+      { frameWidth: 250,
+        frameHeight: 200,
+      }
+  );
 };
 
 gameScene.create = function() {
@@ -82,12 +83,19 @@ gameScene.create = function() {
   .sprite(5350, 350, 'billboardvampire')
   .setDisplaySize(960, 960)
   .setScale(.6)
-
+  this.button = this.physics.add.sprite(1900,575, 'button').setScale(3)
+  this.button.body.allowGravity = false;
+  this.button.body.immovable = true;
+  
+  this.zone = new Phaser.Geom.Rectangle(this.button.x - 25, this.button.y -5, 50, 50);
+  
   this.xterra = this.physics.add.sprite(-180, 519, 'xterra').setScale(.3);
   this.xterra.body.allowGravity = false;
   this.xterra.body.immovable = true;
-  
-
+  this.microtable = this.add.sprite(1800,545,'microtable').setScale(.1)
+  this.skeleton = this.add.sprite(1700,545,'skeleton').setScale(.1)
+  this.guy = this.add.sprite(2000,545,'guy')
+  this.guy.flipX = true
   //this.plants = this.add.tileSprite(400, 279, 800, 600, 'plants');
   //this.plants.scrollFactorX = 0;
 
@@ -105,7 +113,7 @@ gameScene.create = function() {
   this.player = this.physics.add.sprite(150, 300, 'player', 2);
   this.player.canAttack = true;
   this.bird = this.add.sprite(350, 300, 'bird', 0).setScale(.09);
-  
+  this.dino = this.add.sprite(400, 533, 'dino', 0).setScale(.7);
   this.anims.create({
     key: 'left',
     frames: this.anims.generateFrameNumbers('player', { start: 0, end: 1 }),
@@ -127,10 +135,52 @@ gameScene.create = function() {
   });
 
   this.anims.create({
-    key: 'attack',
-    frames: this.anims.generateFrameNumbers('player', { start: 4, end: 4 }),
-    frameRate: 5,
+    key: 'flying',
+    frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 2 }),
+    frameRate: 10,
     repeat: -1
+  });
+  this.bird.anims.play('flying');
+
+  this.anims.create({
+    key: 'dinoBreath',
+    frames: this.anims.generateFrameNumbers('dino', { start: 0, end: 2 }),
+    frameRate: 2,
+    repeat: -1
+  });
+  this.dino.anims.play('dinoBreath');
+  
+  this.speech = 
+  [
+    this.bubble = this.add.sprite(2025, 460, 'bubble').setScale(.2).setVisible(false),
+    this.add.text(2000, 450, "Chongo", {
+    font: "16px Arial",
+    fill: "black",
+    align: "center",
+  }).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5).setVisible(false),
+  this.bubble = this.add.sprite(200, 200, 'bubble').setScale(.2).setVisible(false),
+  this.add.text(224, 224, "Trango", {
+    font: "24px Arial",
+    fill: "red",
+    align: "center",
+  }).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5).setVisible(false)
+  ]
+
+  this.input.keyboard.on('keydown_E', (event) => {
+    if (Phaser.Geom.Rectangle.Overlaps(this.player.getBounds(), this.zone )) {
+      this.speech.forEach(function(element){
+        element.setVisible(true)
+      });
+      this.timedEventStats = this.time.addEvent({
+        delay: 10000,
+        callback: function(){
+          this.speech.forEach(function(element){
+            element.setVisible(false)
+          });
+        },
+        callbackScope:this
+      })
+    }
   });
 
   this.physics.add.collider(this.player, [this.platforms,this.xterra]);
@@ -141,10 +191,10 @@ gameScene.create = function() {
 
   this.cursors = this.input.keyboard.createCursorKeys();
 
-
 };
 
 gameScene.update = function() {
+
   this.cameras.main.scrollX = this.player.x - 400;
 
   this.background.tilePositionX = this.cameras.main.scrollX * 0.08;
@@ -169,13 +219,13 @@ gameScene.update = function() {
 
   if (this.cursors.left.isDown)
   {
-    this.player.setVelocityX(-160);
+    this.player.setVelocityX(-1060);
     this.player.flipX = true;
     this.player.anims.play('left', true);
   }
   else if (this.cursors.right.isDown)
   {
-    this.player.setVelocityX(160);
+    this.player.setVelocityX(1060);
     this.player.flipX = false;
     this.player.anims.play('right', true);
   }
@@ -190,7 +240,8 @@ gameScene.update = function() {
   {
     this.player.setVelocityY(-330);
   }
-};
+
+},this;
 
 // our game's configuration
 let config = {
@@ -201,13 +252,13 @@ let config = {
     default: 'arcade',
     arcade: {
         gravity: { y: 500},
-        debug: false
+        debug: true
     }
   },
   scene: gameScene,
-  title: 'David',
+  title: 'Memories',
   pixelArt: false,
-  backgroundColor: '000000'
+  backgroundColor: '000000',
 };
 
 // create the game, and pass it the configuration
