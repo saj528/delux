@@ -38,6 +38,8 @@ gameScene.preload = function() {
   this.load.image('guy2', 'assets/guy2.png');
   this.load.image('guy3', 'assets/guy3.png');
   this.load.image('guy4', 'assets/guy4.png');
+  this.load.image('guy5', 'assets/hunkgeneral.png');
+  this.load.image('table', 'assets/table.png');
   this.load.image('sentra', 'assets/sentra.png');
   this.load.image('xterra', 'assets/xterra.png');
   this.load.image('bubble', 'assets/bubble.png');
@@ -152,18 +154,24 @@ gameScene.create = function() {
   this.xterra = this.physics.add.sprite(-180, 519, 'xterra').setScale(.3);
   this.xterra.body.allowGravity = false;
   this.xterra.body.immovable = true;
+  this.xterra2 = this.physics.add.sprite(7000, 519, 'xterra').setScale(.3);
+  this.xterra2.body.allowGravity = false;
+  this.xterra2.body.immovable = true;
   this.microtable = this.add.sprite(1700,545,'microtable').setScale(.1)
   this.skeleton = this.add.sprite(1650,545,'skeleton').setScale(.1)
   this.stormtrooper = this.add.sprite(3500,550,'stormtrooper').setScale(.05)
   this.flag = this.add.sprite(3700,520,'flag').setScale(.2)
   this.palmTree = this.add.sprite(4700,520,'palmTree').setScale(.5)
   this.palmTree.flipX = true
-  this.add.sprite(6100,545,'couch').setScale(.09)
+  this.xterra2.flipX = true
+  
+  this.add.sprite(6085,545,'couch').setScale(.09)
   this.add.sprite(5000,520,'palmTree').setScale(.5)
   this.guy = this.add.sprite(1900,545,'guy')
   this.guy2 = this.add.sprite(3000,545,'guy2')
   this.guy3 = this.add.sprite(4000,545,'guy3').setScale(.1)
   this.guy4 = this.add.sprite(4900,545,'guy4').setScale(.3)
+  this.guy5 = this.add.sprite(6100,540,'guy5').setScale(.07)
   this.guy.flipX = true
   //this.plants = this.add.tileSprite(400, 279, 800, 600, 'plants');
   //this.plants.scrollFactorX = 0;
@@ -187,8 +195,9 @@ gameScene.create = function() {
   this.platforms.create(-1000,350,'groundSmall').setScale(3).refreshBody();
   this.platforms.create(-420,400,'groundSmall').setScale(2).refreshBody();
 
-  this.player = this.physics.add.sprite(-3000, 300, 'player', 2);
+  this.player = this.physics.add.sprite(-3000, 400, 'player', 2);
 
+  this.table = this.add.sprite(5900,550,'table').setScale(.1)
   this.bird = this.add.sprite(350, 300, 'bird', 0).setScale(.09);
   this.seagull = this.add.sprite(4500, 300, 'seagull', 0).setScale(.5);
   this.dino = this.add.sprite(1570, 533, 'dino', 0).setScale(.7);
@@ -290,14 +299,14 @@ gameScene.create = function() {
     fill: "black",
     align: "center",
   }).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5).setVisible(false),
-  this.bubble7 = this.add.sprite(4820, 460, 'bubble',).setScale(.2).setVisible(false),
-  this.add.text(4780, 430, "Where da \n clams?!", {
+  this.bubble7 = this.add.sprite(4820, 460, 'bubble',).setScale(.23).setVisible(false),
+  this.add.text(4755, 430, "Where da \n clams saladbar?!", {
     font: "16px Arial",
     fill: "purple",
     align: "center",
   }).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5).setVisible(false),
-  this.bubble7 = this.add.sprite(5820, 460, 'bubble',).setScale(.2).setVisible(false),
-  this.add.text(5780, 430, "Marry \n me?", {
+  this.bubble7 = this.add.sprite(6135, 445, 'bubble',).setScale(.2).setVisible(false),
+  this.add.text(6090, 415, "Marry \n me?", {
     font: "16px Arial",
     fill: "black",
     align: "center",
@@ -324,7 +333,7 @@ gameScene.create = function() {
     }
   });
 
-  this.physics.add.collider(this.player, [this.platforms,this.xterra]);
+  this.physics.add.collider(this.player, [this.platforms,this.xterra,this.xterra2]);
 
   this.cursors = this.input.keyboard.createCursorKeys();
 };
@@ -430,7 +439,7 @@ let config = {
     default: 'arcade',
     arcade: {
         gravity: { y: 500},
-        debug: true
+        debug: false
     }
   },
   scene: gameScene,
