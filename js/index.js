@@ -171,7 +171,6 @@ gameScene.create = function() {
   this.guy2 = this.add.sprite(3000,545,'guy2')
   this.guy3 = this.add.sprite(4000,545,'guy3').setScale(.1)
   this.guy4 = this.add.sprite(4900,545,'guy4').setScale(.3)
-  this.guy5 = this.add.sprite(6100,540,'guy5').setScale(.07)
   this.guy.flipX = true
   //this.plants = this.add.tileSprite(400, 279, 800, 600, 'plants');
   //this.plants.scrollFactorX = 0;
@@ -311,6 +310,7 @@ gameScene.create = function() {
     fill: "black",
     align: "center",
   }).setShadow(3, 3, 'rgba(0,0,0,0.5)', 5).setVisible(false),
+  this.guy5 = this.add.sprite(6100,540,'guy5').setScale(.07)
   ]
   this.bubble1.flipX = true
   this.bubble3.flipX = true
